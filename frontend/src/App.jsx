@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import axios from 'axios'
 import { AuthContext } from './context/AuthContext'
@@ -8,14 +8,20 @@ import EmployeeTable from './components/EmployeeTable'
 import EmployeeForm from './components/EmployeeForm'
 import Navbar from './components/Navbar'
 
-const API_URL = 'http://localhost:8000'   // ← Now using standard port 8000
+const API_URL = 'http://localhost:8000'
+
+// ProtectedRoute must be defined OUTSIDE App so React doesn't remount it on every render
+function ProtectedRoute({ children }) {
+  const { isLoggedIn } = useContext(AuthContext)
+  return isLoggedIn ? children : <Navigate to="/login" />
+}
 
 function App() {
   const { token, logout, isLoggedIn } = useContext(AuthContext)
   const [employees, setEmployees] = useState([])
   const [editingEmployee, setEditingEmployee] = useState(null)
 
-  const fetchEmployees = async () => {
+  const fetchEmployees = useCallback(async () => {
     if (!token) return
     try {
       const res = await axios.get(`${API_URL}/employees/`, {
@@ -30,11 +36,11 @@ function App() {
         logout()
       }
     }
-  }
+  }, [token, logout])
 
   useEffect(() => {
     if (isLoggedIn && token) fetchEmployees()
-  }, [isLoggedIn, token])
+  }, [isLoggedIn, token, fetchEmployees])
 
   const handleDelete = async (id) => {
     if (window.confirm('Delete this employee?')) {
@@ -55,13 +61,9 @@ function App() {
     fetchEmployees()
   }
 
-  const ProtectedRoute = ({ children }) => {
-    return isLoggedIn ? children : <Navigate to="/login" />
-  }
-
   return (
     <Router>
-      <Navbar logout={logout} />
+      <Navbar />
       <div className="min-h-screen bg-gray-100 p-8">
         <Routes>
           <Route path="/login" element={<Login API_URL={API_URL} />} />

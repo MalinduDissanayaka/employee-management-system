@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 
-export default function Navbar({ logout }) {
-  const { isLoggedIn } = useContext(AuthContext)
+export default function Navbar() {
+  const { isLoggedIn, logout } = useContext(AuthContext)
 
   return (
     <nav className="bg-blue-700 text-white p-4">
