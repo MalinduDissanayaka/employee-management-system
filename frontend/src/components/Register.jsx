@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function Register({ API_URL }) {
   const [email, setEmail] = useState('')
@@ -58,7 +58,7 @@ export default function Register({ API_URL }) {
       </form>
 
       <p className="text-center mt-4">
-        Already have an account? <a href="/login" className="text-blue-600">Login here</a>
+        Already have an account? <Link to="/login" className="text-blue-600">Login here</Link>
       </p>
     </div>
   )

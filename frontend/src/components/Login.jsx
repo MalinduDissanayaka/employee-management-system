@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import axios from 'axios'
 import { AuthContext } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function Login({ API_URL }) {
   const [email, setEmail] = useState('')
@@ -68,7 +68,7 @@ export default function Login({ API_URL }) {
       </form>
 
       <p className="text-center mt-4">
-        Don't have an account? <a href="/register" className="text-blue-600">Register here</a>
+        Don't have an account? <Link to="/register" className="text-blue-600">Register here</Link>
       </p>
     </div>
   )
